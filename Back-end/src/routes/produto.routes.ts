@@ -1,28 +1,28 @@
 import { Router } from "express";
-import ProdutoController from "../controllers/produto.controller";
+import ProductController from "../controllers/product.controller";
 import AuthMiddleware from "../middlewares/auth.middlewares";
 
-const produtoController = new ProdutoController();
+const productController = new ProductController();
 const authMiddleware = new AuthMiddleware();
 const routes = Router();
 
 routes.post(
   "/",
   authMiddleware.validate.bind(authMiddleware),
-  produtoController.criarProdutos.bind(produtoController),
+  productController.createProduct.bind(productController),
 );
 
-routes.get("/", produtoController.listarProdutos.bind(produtoController));
+routes.get("/", productController.listProducts.bind(productController));
 
 routes.patch(
   "/:id",
   authMiddleware.validate.bind(authMiddleware),
-  produtoController.atualizarProduto.bind(produtoController),
+  productController.updateProduct.bind(productController),
 );
 routes.delete(
   "/:id",
   authMiddleware.validate.bind(authMiddleware),
-  produtoController.deletarProduto.bind(produtoController),
+  productController.deleteProduct.bind(productController),
 );
 
 export default routes;

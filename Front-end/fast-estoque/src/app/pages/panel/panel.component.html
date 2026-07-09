@@ -1,0 +1,66 @@
+<div>
+  <header>
+    <h1>Painel de Controle</h1>
+    <button (click)="logOut()">Sair</button>
+  </header>
+
+  <section>
+    <h2>Novo Produto</h2>
+    <form (ngSubmit)="createProduct(newProduct)">
+      <label>Nome</label>
+      <input
+        type="text"
+        name="name"
+        [(ngModel)]="newProduct.name"
+        placeholder="Nome do produto"
+      />
+
+      <label>Preço</label>
+      <input
+        type="number"
+        name="price"
+        [(ngModel)]="newProduct.price"
+        placeholder="0.00"
+      />
+
+      <label>Quantidade</label>
+      <input
+        type="number"
+        name="quantity"
+        [(ngModel)]="newProduct.quantity"
+        placeholder="0"
+      />
+
+      <button type="submit">Criar Produto</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>Produtos Cadastrados</h2>
+    <div *ngFor="let product of products">
+      <p>
+        {{ product.name }} — R$ {{ product.price }} — Qtd:
+        {{ product.quantity }}
+      </p>
+      <button (click)="deleteProduct(product.id)">Deletar</button>
+      <button (click)="selectProductToEdit(product)">Editar</button>
+    </div>
+    <p *ngIf="products.length === 0">Nenhum produto cadastrado.</p>
+    <div *ngIf="editingProduct">
+      <h2>Editando: {{ editingProduct.name }}</h2>
+      <input type="text" name="editName" [(ngModel)]="editingProduct.name" />
+      <input
+        type="number"
+        name="editPrice"
+        [(ngModel)]="editingProduct.price"
+      />
+      <input
+        type="number"
+        name="editQuantity"
+        [(ngModel)]="editingProduct.quantity"
+      />
+      <button (click)="confirmUpdate()">Salvar</button>
+      <button (click)="editingProduct = null">Cancelar</button>
+    </div>
+  </section>
+</div>

@@ -8,7 +8,7 @@ app.use(express.json())
 app.use(cors())
 
 app.use("/auth", AuthRoutes)
-app.use("/produtos", ProdutoRoutes)
+app.use("/products", ProdutoRoutes)
 
 
 export default app;
