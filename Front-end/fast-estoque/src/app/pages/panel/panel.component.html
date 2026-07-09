@@ -1,66 +1,156 @@
-<div>
-  <header>
-    <h1>Painel de Controle</h1>
-    <button (click)="logOut()">Sair</button>
-  </header>
+<div class="panel-container">
+  <app-navbar [showLogout]="true" (logout)="logOut()"></app-navbar>
 
-  <section>
-    <h2>Novo Produto</h2>
-    <form (ngSubmit)="createProduct(newProduct)">
-      <label>Nome</label>
-      <input
-        type="text"
-        name="name"
-        [(ngModel)]="newProduct.name"
-        placeholder="Nome do produto"
-      />
+  <main class="panel-main">
+    <section class="create-section">
+      <h2>Novo Produto</h2>
+      <form (ngSubmit)="createProduct(newProduct)" class="create-form">
+        <div class="field">
+          <label>Nome</label>
+          <input
+            pInputText
+            type="text"
+            name="name"
+            [(ngModel)]="newProduct.name"
+            placeholder="Nome do produto"
+          />
+        </div>
+        <div class="field">
+          <label>Preço</label>
+          <p-inputNumber
+            name="price"
+            [(ngModel)]="newProduct.price"
+            mode="currency"
+            currency="BRL"
+            locale="pt-BR"
+            placeholder="R$ 0,00"
+          />
+        </div>
+        <div class="field">
+          <label>Quantidade</label>
+          <p-inputNumber
+            name="quantity"
+            [(ngModel)]="newProduct.quantity"
+            placeholder="0"
+            [min]="0"
+            [max]="1000"
+          />
+        </div>
+        <button
+          pButton
+          type="submit"
+          label="Criar Produto"
+          icon="pi pi-plus"
+        ></button>
+      </form>
+    </section>
 
-      <label>Preço</label>
-      <input
-        type="number"
-        name="price"
-        [(ngModel)]="newProduct.price"
-        placeholder="0.00"
-      />
+    <section class="products-section">
+      <h2>Produtos Cadastrados</h2>
 
-      <label>Quantidade</label>
-      <input
-        type="number"
-        name="quantity"
-        [(ngModel)]="newProduct.quantity"
-        placeholder="0"
-      />
+      <p-table
+        [value]="products"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        styleClass="p-datatable-dark"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Nome</th>
+            <th>Preço</th>
+            <th>Quantidade</th>
+            <th>Ações</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td>{{ product.name }}</td>
+            <td>
+              {{
+                product.price | currency: 'BRL':'symbol':'1.2-2':'pt-BR'
+              }}
+            </td>
+            <td>
+              <span [class.low-stock]="product.quantity < 5">{{
+                product.quantity
+              }}</span>
+            </td>
+            <td class="actions">
+              <button
+                pButton
+                icon="pi pi-pencil"
+                class="p-button-text p-button-sm"
+                (click)="selectProductToEdit(product)"
+              ></button>
+              <button
+                pButton
+                icon="pi pi-trash"
+                class="p-button-text p-button-danger p-button-sm"
+                (click)="deleteProduct(product.id)"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="4" class="empty-message">
+              Nenhum produto cadastrado.
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </section>
+  </main>
 
-      <button type="submit">Criar Produto</button>
-    </form>
-  </section>
-
-  <section>
-    <h2>Produtos Cadastrados</h2>
-    <div *ngFor="let product of products">
-      <p>
-        {{ product.name }} — R$ {{ product.price }} — Qtd:
-        {{ product.quantity }}
-      </p>
-      <button (click)="deleteProduct(product.id)">Deletar</button>
-      <button (click)="selectProductToEdit(product)">Editar</button>
+  <p-dialog
+    header="Editar Produto"
+    [(visible)]="showProductToEdit"
+    [modal]="true"
+    [style]="{ width: '400px' }"
+    (onHide)="editingProduct = null"
+  >
+    <div class="edit-form" *ngIf="editingProduct">
+      <div class="field">
+        <label>Nome</label>
+        <input
+          pInputText
+          type="text"
+          name="editName"
+          [(ngModel)]="editingProduct.name"
+        />
+      </div>
+      <div class="field">
+        <label>Preço</label>
+        <p-inputNumber
+          name="editPrice"
+          [(ngModel)]="editingProduct.price"
+          mode="currency"
+          currency="BRL"
+          locale="pt-BR"
+        />
+      </div>
+      <div class="field">
+        <label>Quantidade</label>
+        <p-inputNumber
+          name="editQuantity"
+          [(ngModel)]="editingProduct.quantity"
+          [min]="0"
+          [max]="1000"
+        />
+      </div>
+      <div class="dialog-actions">
+        <button
+          pButton
+          label="Cancelar"
+          class="p-button-outlined"
+          (click)="editingProduct = null"
+        ></button>
+        <button
+          pButton
+          label="Salvar"
+          icon="pi pi-check"
+          (click)="confirmUpdate()"
+        ></button>
+      </div>
     </div>
-    <p *ngIf="products.length === 0">Nenhum produto cadastrado.</p>
-    <div *ngIf="editingProduct">
-      <h2>Editando: {{ editingProduct.name }}</h2>
-      <input type="text" name="editName" [(ngModel)]="editingProduct.name" />
-      <input
-        type="number"
-        name="editPrice"
-        [(ngModel)]="editingProduct.price"
-      />
-      <input
-        type="number"
-        name="editQuantity"
-        [(ngModel)]="editingProduct.quantity"
-      />
-      <button (click)="confirmUpdate()">Salvar</button>
-      <button (click)="editingProduct = null">Cancelar</button>
-    </div>
-  </section>
+  </p-dialog>
 </div>

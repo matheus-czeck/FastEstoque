@@ -1,22 +1,39 @@
-<div>
-  <form (ngSubmit)="login()">
-    <label for="email">Email:</label>
-    <input
-      type="text"
-      name="email"
-      id="email"
-      [(ngModel)]="email"
-      placeholder="seu@email.com"
-    />
-    <label for="password">Senha:</label>
-    <input
-      type="text"
-      name="password"
-      id="password"
-      [(ngModel)]="password"
-      placeholder="Sua senha"
-    />
-    <p *ngIf="error">{{ error }}</p>
-    <button type="submit">Entrar</button>
-  </form>
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <i class="pi pi-box"></i>
+      <h1>FastEstoque</h1>
+      <p>Acesso restrito a funcionários</p>
+    </div>
+
+    <form (ngSubmit)="login()">
+      <div class="field">
+        <label for="email">Email</label>
+        <input
+          pInputText
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="seu@email.com"
+        />
+      </div>
+
+      <div class="field">
+        <label for="password">Senha</label>
+        <input
+          pInputText
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="••••••••"
+        />
+      </div>
+
+      <p class="error" *ngIf="error">{{ error }}</p>
+
+      <button pButton type="submit" label="Entrar" icon="pi pi-sign-in"></button>
+    </form>
+  </div>
 </div>

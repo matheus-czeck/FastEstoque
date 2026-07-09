@@ -1,0 +1,13 @@
+<div class="product-card">
+  <div class="product-icon">
+    <i class="pi pi-box"></i>
+  </div>
+  <div class="product-info">
+    <h3>{{ product.name }}</h3>
+    <p class="product-price">{{ product.price | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+    <span class="product-quantity" [class.low]="product.quantity < 5">
+      <i class="pi pi-warehouse"></i>
+      {{ product.quantity }} em estoque
+    </span>
+  </div>
+</div>

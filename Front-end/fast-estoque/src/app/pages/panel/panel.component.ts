@@ -4,12 +4,31 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProductsService } from '../../services/products.service';
 import { AuthService } from '../../services/auth.service';
-import { Product, CreateProduct } from '../../models/produto.model';
+import { Product, CreateProduct } from '../../models/product.model';
+import { DialogModule } from 'primeng/dialog';
+import { TagModule } from 'primeng/tag';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { CurrencyPipe } from '@angular/common';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
 
 @Component({
   selector: 'app-panel',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    DialogModule,
+    TagModule,
+    TableModule,
+    ButtonModule,
+    InputTextModule,
+    InputNumberModule,
+    CurrencyPipe,
+    NavbarComponent,
+  ],
   templateUrl: './panel.component.html',
   styleUrl: './panel.component.css',
 })
@@ -17,6 +36,7 @@ export class PanelComponent implements OnInit {
   products: Product[] = [];
   newProduct: CreateProduct = { name: '', price: 0, quantity: 0 };
   editingProduct: Product | null = null;
+  showProductToEdit = false;
 
   constructor(
     private authService: AuthService,
@@ -73,12 +93,14 @@ export class PanelComponent implements OnInit {
 
   selectProductToEdit(product: Product) {
     this.editingProduct = { ...product };
+    this.showProductToEdit = true;
   }
 
   confirmUpdate() {
     if (!this.editingProduct) return;
     this.updateProduct(this.editingProduct.id, this.editingProduct);
     this.editingProduct = null;
+    this.showProductToEdit = false;
   }
 
   logOut() {

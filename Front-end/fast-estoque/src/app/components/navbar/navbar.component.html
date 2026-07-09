@@ -1,0 +1,19 @@
+<header class="navbar">
+  <div class="navbar-brand">
+    <i class="pi pi-box"></i>
+    <h1>FastEstoque</h1>
+  </div>
+
+  <div class="navbar-actions">
+    <ng-container *ngIf="showLogout; else publicNav">
+      <span class="panel-badge">Painel do Funcionário</span>
+      <button pButton icon="pi pi-sign-out" label="Sair" class="p-button-outlined p-button-sm" (click)="logout.emit()"></button>
+    </ng-container>
+
+    <ng-template #publicNav>
+      <a routerLink="/login" class="login-link">
+        <i class="pi pi-sign-in"></i> Área do funcionário
+      </a>
+    </ng-template>
+  </div>
+</header>
