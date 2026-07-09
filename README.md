@@ -32,18 +32,6 @@ Este projeto resolve isso separando claramente a área pública da área privada
 
 ---
 
-## ✨ Funcionalidades
-
-- [x] Interface inicial com opções básicas de configuração
-- [x] Geração de links curtos aleatórios e seguros (via `nanoId`)
-- [x] Customização de links com termos personalizados
-- [x] Proteção de URLs por senha para acesso restrito
-- [x] Geração dinâmica de QR Code para compartilhamento rápido
-- [x] Expiração de links (24h, 7 dias, 30 dias ou nunca)
-- [x] Rastreamento de cliques (estado e dispositivo)
-
----
-
 ## 🛠️ Tecnologias
 
 **Back-end**
