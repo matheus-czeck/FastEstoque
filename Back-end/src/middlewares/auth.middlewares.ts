@@ -7,7 +7,7 @@ class AuthMiddleware {
     const token = authHeader?.split(" ")[1];
 
     if (!token) {
-      return res.status(401).json({ error: " Token nao fornecido" });
+      return res.status(401).json({ error: "Token nao fornecido" });
     }
     const { data, error } = await supabase.auth.getUser(token);
 

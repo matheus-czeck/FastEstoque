@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import ProdutoService from "../produto.service";
+import ProductService from "../product.service";
 
 const mockPrisma = {
   produtos: {
@@ -11,15 +11,15 @@ const mockPrisma = {
   },
 };
 
-const produtoService = new ProdutoService(mockPrisma as any);
+const productService = new ProductService(mockPrisma as any);
 
-describe("ProdutoService", () => {
+describe("ProductService", () => {
   it("Deve lancar erro quando nome esta vazio", async () => {
     await expect(
-      produtoService.criarNovoProduto({
-        nome: "",
-        preco: 10,
-        quantidade: 5,
+      productService.createNewProduct({
+        name: "",
+        price: 10,
+        quantity: 5,
         created_by: "user-123",
       }),
     ).rejects.toThrow("Nome e obrigatorio.");
@@ -27,10 +27,10 @@ describe("ProdutoService", () => {
 
   it("Deve lancar erro quando preco e invalido", async () => {
     await expect(
-      produtoService.criarNovoProduto({
-        nome: "Produto1",
-        preco: 0,
-        quantidade: 3,
+      productService.createNewProduct({
+        name: "Produto1",
+        price: 0,
+        quantity: 3,
         created_by: "user-123",
       }),
     ).rejects.toThrow("Preco deve ser maior que 0");
@@ -38,10 +38,10 @@ describe("ProdutoService", () => {
 
   it("Deve lancar erro quando a quantidade e invalida", async () => {
     await expect(
-      produtoService.criarNovoProduto({
-        nome: "Produto1",
-        preco: 20,
-        quantidade: -1,
+      productService.createNewProduct({
+        name: "Produto1",
+        price: 20,
+        quantity: -1,
         created_by: "user-123",
       }),
     ).rejects.toThrow("Quantidade nao pode ser negativa");
@@ -51,26 +51,26 @@ describe("ProdutoService", () => {
     mockPrisma.produtos.create.mockResolvedValue({
       id: "1",
       name: "Produto1",
-      preco: 20,
-      qauntidade: 5,
+      price: 20,
+      quantity: 5,
     });
-    const resultado = await produtoService.criarNovoProduto({
-      nome: "Produto1",
-      preco: 20,
-      quantidade: 5,
+    const result = await productService.createNewProduct({
+      name: "Produto1",
+      price: 20,
+      quantity: 5,
       created_by: "user-123",
     });
 
-    expect(resultado).toHaveProperty("id");
-    expect(resultado.name).toBe("Produto1");
+    expect(result).toHaveProperty("id");
+    expect(result.name).toBe("Produto1");
   });
 
   it("deve retornar lista vazia quando nao ha produto", async () => {
     mockPrisma.produtos.findMany.mockResolvedValue([]);
 
-    const resultado = await produtoService.listarProdutos();
+    const result = await productService.listProducts();
 
-    expect(resultado).toHaveLength(0);
+    expect(result).toHaveLength(0);
   });
 
   it("deve retornar lista de produtos", async () => {
@@ -78,45 +78,45 @@ describe("ProdutoService", () => {
       {
         id: "1",
         name: "Produto1",
-        preco: 20,
-        quantidade: 5,
+        price: 20,
+        quantity: 5,
         created_by: "user-123",
       },
     ]);
 
-    const resultado = await produtoService.listarProdutos();
+    const result = await productService.listProducts();
 
-    expect(resultado).toHaveLength(1);
-    expect(resultado[0].name).toBe("Produto1");
+    expect(result).toHaveLength(1);
+    expect(result[0].name).toBe("Produto1");
   });
 
   it("deve retornar erro ao deletar produto nao encontrado", async () => {
     mockPrisma.produtos.findUnique.mockResolvedValue(null);
 
     await expect(
-      produtoService.deletarProduto("id-inexistente"),
+      productService.deleteProduct("id-inexistente"),
     ).rejects.toThrow("Produto nao encontrado");
   });
 
   it("deve deletar produto com sucesso", async () => {
     mockPrisma.produtos.findUnique.mockResolvedValue({
       id: "1",
-      nome: "Produto1",
+      name: "Produto1",
     });
     mockPrisma.produtos.delete.mockResolvedValue({ id: "1", nome: "Produto1" });
 
-    const resutado = await produtoService.deletarProduto("1");
-    expect(resutado).toHaveProperty("id");
+    const result = await productService.deleteProduct("1");
+    expect(result).toHaveProperty("id");
   });
 
   it("deve retornar erroi ao atualizar produto nao encontrado", async () => {
     mockPrisma.produtos.findUnique.mockResolvedValue(null);
 
     await expect(
-      produtoService.atualizarProduto("id-inexistente", {
-        nome: "Novo",
-        preco: 10,
-        quantidade: 10,
+      productService.updateProduct("id-inexistente", {
+        name: "Novo",
+        price: 10,
+        quantity: 10,
       }),
     ).rejects.toThrow("Produto nao encontrado");
   });
@@ -124,22 +124,22 @@ describe("ProdutoService", () => {
   it("deve atualizar produto com sucesso", async () => {
     mockPrisma.produtos.findUnique.mockResolvedValue({
       id: "1",
-      nome: "Produto1",
+      name: "Produto1",
     });
     mockPrisma.produtos.update.mockResolvedValue({
       id: "1",
       name: "Novo",
-      preco: 10,
-      quantidade: 15,
+      price: 10,
+      quantity: 15,
     });
 
-    const resultado = await produtoService.atualizarProduto("1", {
-      nome: "Novo",
-      preco: 10,
-      quantidade: 15,
+    const result = await productService.updateProduct("1", {
+      name: "Novo",
+      price: 10,
+      quantity: 15,
     });
 
-    expect(resultado).toHaveProperty("id");
-    expect(resultado.name).toBe("Novo");
+    expect(result).toHaveProperty("id");
+    expect(result.name).toBe("Novo");
   });
 });
