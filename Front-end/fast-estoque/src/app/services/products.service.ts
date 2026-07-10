@@ -2,12 +2,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Product, CreateProduct } from '../models/product.model';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductsService {
-  apiUrl = 'https://fastestoque-production-2ada.up.railway.app';
+  private apiUrl = environment.apiUrl;
+
   constructor(
     private http: HttpClient,
     private authService: AuthService,
