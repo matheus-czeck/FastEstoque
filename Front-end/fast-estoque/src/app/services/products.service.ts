@@ -7,7 +7,7 @@ import { AuthService } from './auth.service';
   providedIn: 'root',
 })
 export class ProductsService {
-  apiUrl = 'http://localhost:3000';
+  apiUrl = 'https://fastestoque-production-2ada.up.railway.app';
   constructor(
     private http: HttpClient,
     private authService: AuthService,
