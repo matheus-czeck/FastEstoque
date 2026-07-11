@@ -11,6 +11,13 @@
         [product]="product"
       ></app-product-card>
     </div>
+    <p-paginator
+    [rows]="10"
+    [showFirstLastIcon]="false"
+    [totalRecords]="total"
+    (onPageChange)="onPageChange($event)"
+    >
+    </p-paginator>
 
     <div class="empty-state" *ngIf="products.length === 0">
       <i class="pi pi-inbox"></i>

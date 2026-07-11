@@ -13,6 +13,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CurrencyPipe } from '@angular/common';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { ToastService } from '../../services/toast.service';
+import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
   selector: 'app-panel',
@@ -28,6 +30,7 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
     InputNumberModule,
     CurrencyPipe,
     NavbarComponent,
+    PaginatorModule,
   ],
   templateUrl: './panel.component.html',
   styleUrl: './panel.component.css',
@@ -37,11 +40,17 @@ export class PanelComponent implements OnInit {
   newProduct: CreateProduct = { name: '', price: 0, quantity: 0 };
   editingProduct: Product | null = null;
   showProductToEdit = false;
+  page: number = 1;
+  total: number = 0;
+  isAdmin = this.authService.getRole() === 'admin';
+  showRegisterDialog = false;
+  newEmployee = { email: '', password: '' };
 
   constructor(
     private authService: AuthService,
     private productsService: ProductsService,
     private router: Router,
+    private toastService: ToastService,
   ) {}
 
   ngOnInit(): void {
@@ -49,12 +58,13 @@ export class PanelComponent implements OnInit {
   }
 
   listProducts() {
-    this.productsService.listProducts().subscribe({
-      next: (products) => {
-        this.products = products;
+    this.productsService.listProducts(this.page).subscribe({
+      next: (res) => {
+        this.products = res.products;
+        this.total = res.total;
       },
       error: () => {
-        console.error('Produtos nao encontrados!');
+        this.toastService.error('Ocorreu um erro Interno.');
       },
     });
   }
@@ -63,9 +73,10 @@ export class PanelComponent implements OnInit {
     this.productsService.createProduct({ name, price, quantity }).subscribe({
       next: () => {
         this.listProducts();
+        this.toastService.success('Produto criado com sucesso!');
       },
       error: () => {
-        console.error('Erro ao criar produto!');
+        this.toastService.error('Ocorreu um erro ao criar o Produto.');
       },
     });
   }
@@ -74,9 +85,10 @@ export class PanelComponent implements OnInit {
     this.productsService.deleteProduct(id).subscribe({
       next: () => {
         this.listProducts();
+        this.toastService.success('Produto deletado com sucesso!');
       },
       error: () => {
-        console.error('Erro ao deletar produto.');
+        this.toastService.error('Erro ao deletar produto.');
       },
     });
   }
@@ -84,9 +96,10 @@ export class PanelComponent implements OnInit {
     this.productsService.updateProduct(id, product).subscribe({
       next: () => {
         this.listProducts();
+        this.toastService.success('Produto alterado com sucesso!');
       },
       error: () => {
-        console.error('Erro ao atualizar produto.');
+        this.toastService.error('Erro ao alterar produto.');
       },
     });
   }
@@ -106,5 +119,27 @@ export class PanelComponent implements OnInit {
   logOut() {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+  onPageChange(event: any) {
+    this.page = event.page + 1;
+    this.ngOnInit();
+  }
+  openRegisterDialog() {
+    this.showRegisterDialog = true;
+  }
+
+  registerEmpoyee() {
+    this.authService
+      .registerEmployee(this.newEmployee.email, this.newEmployee.password)
+      .subscribe({
+        next: () => {
+          this.toastService.success('Novo colaborador criado!');
+          this.showRegisterDialog = false;
+          this.newEmployee = { email: '', password: '' };
+        },
+        error: () => {
+          this.toastService.error('Erro ao criar colaborador.');
+        },
+      });
   }
 }

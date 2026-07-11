@@ -1,3 +1,4 @@
+import { count } from "node:console";
 import { PrismaClient } from "../../generated/prisma";
 
 export default class ProductService {
@@ -29,10 +30,15 @@ export default class ProductService {
     });
   }
 
-  async listProducts() {
-    const products = await this.prisma.produtos.findMany();
+  async listProducts(page: number = 1) {
+    const limit = 10;
+    const products = await this.prisma.produtos.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+    const total = await this.prisma.produtos.count();
 
-    return products;
+    return { products, total };
   }
 
   async deleteProduct(id: string) {

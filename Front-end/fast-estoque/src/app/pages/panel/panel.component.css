@@ -116,3 +116,29 @@
   justify-content: flex-end;
   margin-top: 0.5rem;
 }
+
+:host ::ng-deep .p-paginator {
+  background-color: transparent;
+  border: none;
+  border-radius: 12px;
+  margin: 5rem 0;
+  height: 0.5rem;
+}
+
+:host ::ng-deep .p-paginator .p-paginator-element {
+  color: #aaa;
+  border-radius: 8px;
+}
+
+:host ::ng-deep .p-paginator .p-paginator-element:hover {
+  background-color: #22223a;
+  border-radius: 50%;
+  color: #fff;
+}
+
+:host ::ng-deep .p-paginator .p-highlight {
+  background-color: #6366f1 !important;
+  transition: 1s;
+  border-radius: 50%;
+  color: #fff !important;
+}

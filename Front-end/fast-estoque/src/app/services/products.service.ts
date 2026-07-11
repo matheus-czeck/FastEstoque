@@ -21,8 +21,10 @@ export class ProductsService {
     });
   }
 
-  listProducts() {
-    return this.http.get<Product[]>(`${this.apiUrl}/products`);
+  listProducts(page: number) {
+    return this.http.get<{ products: Product[]; total: number }>(
+      `${this.apiUrl}/products?page=${page}`,
+    );
   }
   createProduct(product: CreateProduct) {
     return this.http.post<Product>(`${this.apiUrl}/products`, product, {

@@ -1,5 +1,10 @@
 <div class="panel-container">
-  <app-navbar [showLogout]="true" (logout)="logOut()"></app-navbar>
+  <app-navbar
+    [showLogout]="true"
+    [showRegister]="isAdmin"
+    (logout)="logOut()"
+    (register)="openRegisterDialog()"
+  ></app-navbar>
 
   <main class="panel-main">
     <section class="create-section">
@@ -66,7 +71,7 @@
             <td>{{ product.name }}</td>
             <td>
               {{
-                product.price | currency: 'BRL':'symbol':'1.2-2':'pt-BR'
+                product.price | currency: "BRL" : "symbol" : "1.2-2" : "pt-BR"
               }}
             </td>
             <td>
@@ -153,4 +158,50 @@
       </div>
     </div>
   </p-dialog>
+
+  <p-dialog
+    header="Registrar novo Funcionario"
+    [(visible)]="showRegisterDialog"
+    [modal]="true"
+    [style]="{ width: '400px' }"
+    (onHide)="newEmployee"
+  >
+    <div class="edit-form" *ngIf="showRegisterDialog">
+      <div class="field">
+        <label>Email</label>
+        <input
+          pInputText
+          type="text"
+          name="email"
+          [(ngModel)]="newEmployee.email"
+        />
+      </div>
+      <div class="field">
+        <label>Senha</label>
+        <input
+          pInputText
+          type="password"
+          name="password"
+          [(ngModel)]="newEmployee.password"
+        />
+      </div>
+
+      <div class="dialog-actions">
+        <button
+          pButton
+          label="Registrar"
+          icon="pi pi-check"
+          (click)="registerEmpoyee()"
+        ></button>
+      </div>
+    </div>
+  </p-dialog>
+
+  <p-paginator
+    [rows]="10"
+    [showFirstLastIcon]="false"
+    [totalRecords]="total"
+    (onPageChange)="onPageChange($event)"
+  >
+  </p-paginator>
 </div>

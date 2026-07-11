@@ -1,5 +1,16 @@
 import { describe, it, expect, vi } from "vitest";
 import AuthService from "../../services/auth.service";
+import { supabaseAdmin } from "../../repositories/supabase-admin";
+
+vi.mock("../../repositories/supabase-admin.ts", () => ({
+  supabaseAdmin: {
+    auth: {
+      admin: {
+        createUser: vi.fn(),
+      },
+    },
+  },
+}));
 
 const mockSupabase = {
   auth: {
@@ -34,7 +45,10 @@ describe("AuthService", () => {
 
   it("Deve retornar token quando login for correto", async () => {
     mockSupabase.auth.signInWithPassword.mockResolvedValue({
-      data: { session: { acess_token: "token_fake_123" } },
+      data: {
+        session: { acess_token: "token_fake_123" },
+        user: { user_metadata: { role: "admin" } },
+      },
       error: null,
     });
 

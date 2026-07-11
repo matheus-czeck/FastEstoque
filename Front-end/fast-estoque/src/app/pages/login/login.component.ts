@@ -27,6 +27,7 @@ export class LoginComponent {
     this.authService.login(this.email, this.password).subscribe({
       next: (response) => {
         localStorage.setItem('token', response.token);
+        localStorage.setItem('role', response.role);
         this.router.navigate(['/panel']);
       },
       error: () => {

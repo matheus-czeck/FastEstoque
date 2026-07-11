@@ -8,6 +8,7 @@ const mockPrisma = {
     update: vi.fn(),
     delete: vi.fn(),
     findUnique: vi.fn(),
+    count: vi.fn(),
   },
 };
 
@@ -67,10 +68,12 @@ describe("ProductService", () => {
 
   it("deve retornar lista vazia quando nao ha produto", async () => {
     mockPrisma.produtos.findMany.mockResolvedValue([]);
+    mockPrisma.produtos.count.mockResolvedValue(0);
 
-    const result = await productService.listProducts();
+    const result = await productService.listProducts(1);
 
-    expect(result).toHaveLength(0);
+    expect(result.products).toHaveLength(0);
+    expect(result.total).toBe(0);
   });
 
   it("deve retornar lista de produtos", async () => {
@@ -83,11 +86,13 @@ describe("ProductService", () => {
         created_by: "user-123",
       },
     ]);
+    mockPrisma.produtos.count.mockResolvedValue(1);
 
-    const result = await productService.listProducts();
+    const result = await productService.listProducts(1);
 
-    expect(result).toHaveLength(1);
-    expect(result[0].name).toBe("Produto1");
+    expect(result.products).toHaveLength(1);
+    expect(result.products[0].name).toBe("Produto1");
+    expect(result.total).toBe(1);
   });
 
   it("deve retornar erro ao deletar produto nao encontrado", async () => {

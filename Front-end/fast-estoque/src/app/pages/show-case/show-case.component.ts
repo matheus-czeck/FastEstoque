@@ -7,7 +7,8 @@ import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { ProductCardComponent } from "../../components/product-card/product-card.component";
+import { ProductCardComponent } from '../../components/product-card/product-card.component';
+import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
   selector: 'app-show-case',
@@ -19,24 +20,33 @@ import { ProductCardComponent } from "../../components/product-card/product-card
     ButtonModule,
     RouterModule,
     NavbarComponent,
-    ProductCardComponent
-],
+    ProductCardComponent,
+    PaginatorModule
+  ],
   templateUrl: './show-case.component.html',
   styleUrl: './show-case.component.css',
 })
 export class ShowCaseComponent implements OnInit {
   products: Product[] = [];
+  page: number = 1;
+  total: number = 0
 
   constructor(private productsService: ProductsService) {}
 
   ngOnInit(): void {
-    this.productsService.listProducts().subscribe({
-      next: (products) => {
-        this.products = products;
+    this.productsService.listProducts(this.page).subscribe({
+      next: (res) => {
+        this.products = res.products;
+        this.total = res.total
       },
       error: () => {
         console.log('Erro ao carregar produtos');
       },
     });
+  }
+
+  onPageChange(event: any){
+    this.page = event.page + 1
+    this.ngOnInit()
   }
 }

@@ -7,7 +7,21 @@
   <div class="navbar-actions">
     <ng-container *ngIf="showLogout; else publicNav">
       <span class="panel-badge">Painel do Funcionário</span>
-      <button pButton icon="pi pi-sign-out" label="Sair" class="p-button-outlined p-button-sm" (click)="logout.emit()"></button>
+      <button
+        *ngIf="showRegister"
+        pButton
+        icon="pi pi-user-plus"
+        label="Novo Funcionário"
+        class="p-button-sm"
+        (click)="register.emit()"
+      ></button>
+      <button
+        pButton
+        icon="pi pi-sign-out"
+        label="Sair"
+        class="p-button-outlined p-button-sm"
+        (click)="logout.emit()"
+      ></button>
     </ng-container>
 
     <ng-template #publicNav>

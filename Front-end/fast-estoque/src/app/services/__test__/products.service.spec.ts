@@ -14,16 +14,17 @@ const mockAuthService = {
   getToken: vi.fn().mockReturnValue('token_false'),
 };
 
-
 const service = new ProductsService(mockHttp as any, mockAuthService as any);
 
 describe('ProductsService', () => {
   it('deve chamar a URL correta ao listar produtos', () => {
     mockHttp.get.mockReturnValue({ subscribe: vi.fn() });
 
-    service.listProducts();
+    service.listProducts(1);
 
-    expect(mockHttp.get).toHaveBeenCalledWith('http://localhost:3000/products');
+    expect(mockHttp.get).toHaveBeenCalledWith(
+      'http://localhost:3000/products?page=1',
+    );
   });
 
   it('deve chamar a URL correta ao criar produto', () => {
