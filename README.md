@@ -1,59 +1,62 @@
 <h1>🏪 FastEstoque</h1>
 
-<p>API REST Full-stack — gerencie o estoque da sua loja com controle de acesso seguro por autenticação JWT.</p>
+<p>Sistema web full stack de gerenciamento de estoque com área pública para visualização de produtos e painel privado para funcionários autenticados.</p>
 
-![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow?style=flat-square)
+![Status](https://img.shields.io/badge/status-finalizado-green?style=flat-square)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-22+-339933?style=flat-square&logo=nodedotjs&logoColor=white)
+![Angular](https://img.shields.io/badge/Angular-17+-DD0031?style=flat-square&logo=angular&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17+-4169E1?style=flat-square&logo=postgresql&logoColor=white)
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white)
+
+🌐 **[fastestoque.matheushcz.dev](https://fastestoque.matheushcz.dev)**
 
 ---
 
 ## 📖 Sobre o projeto
 
-O **FastEstoque** nasceu da necessidade de pequenos negócios terem controle real sobre seu estoque com segurança. Mais do que um CRUD simples, o objetivo é entregar um sistema onde qualquer pessoa pode consultar os produtos disponíveis, mas apenas funcionários autenticados podem gerenciar o estoque.
+O **FastEstoque** é um sistema de gerenciamento de estoque que separa claramente a área pública da área privada. Qualquer visitante pode consultar os produtos disponíveis, mas apenas funcionários autenticados podem criar, editar ou remover itens do estoque.
 
-Este projeto resolve isso separando claramente a área pública da área privada, utilizando autenticação via Supabase Auth com tokens JWT para proteger as operações sensíveis.
+A autenticação é gerenciada pelo Supabase Auth com tokens JWT, e o controle de acesso por roles permite que apenas administradores cadastrem novos funcionários.
 
-> Projeto desenvolvido como prática de arquitetura REST com autenticação, testes unitários e deploy ponta a ponta, focado em consolidar boas práticas de desenvolvimento backend.
+> Desenvolvido com foco em boas práticas: arquitetura em camadas, testes unitários com TDD, CI/CD com GitHub Actions e deploy ponta a ponta.
 
 ---
 
 ## ✨ Funcionalidades
 
-- [x] Listagem pública de produtos (sem autenticação)
+- [x] Vitrine pública com listagem e paginação de produtos
 - [x] Autenticação de funcionários via Supabase Auth com JWT
-- [x] Cadastro de produtos com nome, preço e quantidade
-- [x] Edição de produtos autenticada
-- [x] Exclusão de produtos autenticada
-- [x] Validações de negócio 
-- [x] Testes unitários com Vitest (AuthService e ProdutoService)
+- [x] Painel privado com CRUD completo de produtos
+- [x] Cadastro de novos funcionários restrito a administradores (role admin)
+- [x] Validações de negócio (nome mínimo 3 caracteres, preço maior que zero, quantidade máxima 1000)
+- [x] Feedback visual com toasts de sucesso e erro
+- [x] Testes unitários com Vitest — backend e frontend
+- [x] CI/CD com GitHub Actions rodando testes a cada push
+- [x] Deploy contínuo — backend no Railway, frontend no Netlify
 
 ---
 
 ## 🛠️ Tecnologias
 
 **Back-end**
-
 - [Node.js](https://nodejs.org/) — ambiente de execução JavaScript
-- [TypeScript](https://www.typescriptlang.org/) — superset com tipagem estática
+- [TypeScript](https://www.typescriptlang.org/) — tipagem estática
 - [Express](https://expressjs.com/) — framework web para construção da API
-- [Prisma ORM](https://www.prisma.io/) — mapeamento objeto-relacional (ORM)
-- [SupaBase](https://supabase.com/) — Servico Back-end e DataBase
+- [Prisma ORM](https://www.prisma.io/) — mapeamento objeto-relacional
+- [Supabase Auth](https://supabase.com/) — autenticação e gerenciamento de usuários
+- [Vitest](https://vitest.dev/) — testes unitários
 
 **Front-end**
-
-----EM DESENVOLVIMENTO -----
-
-- [Angular 17](https://angular.io/) — framework SPA para a interface
-- [PrimeNG](https://primeng.org/) — biblioteca de componentes de UI de alta performance
-- [PrimeIcons](https://primeng.org/icons) — conjunto oficial de ícones do ecossistema Prime
+- [Angular 17](https://angular.io/) — framework SPA
+- [PrimeNG](https://primeng.org/) — biblioteca de componentes UI
+- [PrimeIcons](https://primeng.org/icons) — ícones
 
 **Banco de Dados & Infraestrutura**
-
-- [SupaBase](https://supabase.com/) — BackEnd como servico 
-- [Git](https://git-scm.com/) / [GitHub](https://github.com/) — controle de versão e hospedagem do código
+- [PostgreSQL](https://www.postgresql.org/) via Supabase — banco de dados relacional
+- [Railway](https://railway.app/) — deploy do backend
+- [Netlify](https://netlify.com/) — deploy do frontend
+- [GitHub Actions](https://github.com/features/actions) — CI/CD
 
 ---
 
@@ -63,24 +66,49 @@ Este projeto resolve isso separando claramente a área pública da área privada
 FastEstoque/
 ├── Back-end/
 │   ├── src/
-│   │   ├── __test__        # Testes unitarios
-│   │   ├── @types          # Tipos globais 
-│   │   ├── controllers/    # Controladores que gerenciam as requisições das URLs
-│   │   ├── dtos/           # Validação dos dados vindos do front-end
-│   │   ├── repositories/   # Camada de comunicação com o Neon Postgres via Prisma
-│   │   ├── routes/         # Definição dos endpoints da API
-│   │   ├── services/       # Direcionamento de responsabilidades
-│   │   ├── app.ts          # Inicialização e configuração do Express
-│   │   ├── middlewares     # Autenticacao de usuario
-│   │   └── server.ts       # Conexão com o banco de dados e inicialização do servidor
-    │
-    ├── prisma/
-    │   ├── migrations/     # Versionamento estrutural do banco de dados
-    │   └── schema.prisma   # Definição das tabelas de URLs e logs
-    │
-    └── package.json
+│   │   ├── @types/           # Extensão de tipos globais (Express Request)
+│   │   ├── controllers/      # Camada de entrada — recebe e responde requisições
+│   │   ├── services/         # Camada de negócio — regras e validações
+│   │   │   └── __tests__/        # Testes unitários dos services
+│   │   ├── repositories/     # Conexão com banco de dados e Supabase
+│   │   ├── middlewares/      # Autenticação (auth) e controle de acesso (admin)
+│   │   ├── routes/           # Definição dos endpoints
+│   │   ├── dtos/             # Tipagem dos dados de entrada
+│   │   ├── app.ts            # Configuração do Express e CORS
+│   │   └── server.ts         # Inicialização do servidor
+│   ├── prisma/
+│   │   ├── migrations/       # Versionamento do banco de dados
+│   │   └── schema.prisma     # Definição dos modelos
+│   └── package.json
+│
+└── Front-end/
+    └── fast-estoque/
+        └── src/
+            ├── app/
+            │   ├── components/   # Componentes reutilizáveis (Navbar, ProductCard)
+            │   ├── pages/        # Telas (show-case, login, panel)
+            │   ├── services/     # Comunicação com a API
+            │   │   └── __test__/ # Testes unitários dos services
+            │   ├── guards/       # Proteção de rotas privadas
+            │   ├── models/       # Interfaces TypeScript
+            │   └── dtos/         # Tipagem dos dados de entrada
+            └── environments/     # Configuração por ambiente (dev/prod)
+```
 
+-----
 
+## 🗄️ Modelo de dados
+
+```prisma
+model Produtos {
+  id         String   @id @default(uuid())
+  name       String
+  price      Decimal
+  quantity   Int
+  created_by String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
 ```
 
 ---
@@ -90,89 +118,64 @@ FastEstoque/
 ### Pré-requisitos
 
 - Node.js 22+
-- Conta no Neon.tech (ou instância local do PostgreSQL)
+- Conta no [Supabase](https://supabase.com/)
 - npm
 
-### Configuração
+### Back-end
 
 ```bash
-# 1. Clone o repositório
 git clone https://github.com/matheus-czeck/FastEstoque
-cd MenosLink
-Back-end
-```
-
-```Bash
-cd Back-end
-
-```
-
-```# Instale as dependências
+cd FastEstoque/Back-end
 npm install
-
 ```
 
-```# Configure as variáveis de ambiente
-cp .env.example .env
+Crie o arquivo `.env` com as variáveis:
 
-# Edite o arquivo .env adicionando a sua URL de conexão do Neon PostgreSQL:
-# DATABASE_URL="postgresql://usuario:senha@ep-nome-da-instancia.neon.tech/menoslink?sslmode=require"
-
-
+```env
+DATABASE_URL="sua_connection_string_supabase"
+SUPABASE_URL="https://seu-projeto.supabase.co"
+SUPABASE_ANON_KEY="sua_anon_key"
+SUPABASE_SERVICE_ROLE_KEY="sua_service_role_key"
+ALLOWED_ORIGINS="http://localhost:4200"
 ```
 
-```# Execute as migrations para estruturar o banco
-npx prisma migrate dev
+```bash
+# Rodar migrations
+$env:DATABASE_URL="sua_direct_url_porta_5432"; npx prisma migrate dev
 
-```
-
-```# Inicie o servidor de desenvolvimento
+# Iniciar servidor
 npm run dev
-
---- EM DESENVOLVIMENTO -----
-
-Front-end
 ```
 
-```Bash
-cd ../Front-end/FastEstoque
+### Front-end
 
-```
-
-```# Instale as dependências
+```bash
+cd ../Front-end/fast-estoque
 npm install
-
-```
-```
-
-```# Inicie a aplicação Angular
-npm start
+ng serve
 ```
 
-Abra seu navegador em http://localhost:4200.
+Acesse `http://localhost:4200`.
 
 ---
 
-```
-```🗄️ Modelo de dados
-Snippet de código
+## 🧪 Testes
 
-model Produtos {
-id            String    @id @default(uuid())
-nome          String
-preco         Decimal
-quantity      Int
-created_by    String
-created_at  DateTime  @default(now())
-updated_at  DateTime  @updatedAt
-}
+```bash
+# Back-end
+cd Back-end
+npm test
+
+# Front-end
+cd Front-end/fast-estoque
+npm test
+```
 
 ---
-```
 
-👨‍💻 Autor
-Matheus Henrique Czeck
-Estudante de Engenharia de Software · Dev Web Full Stack em formação
+## 👨‍💻 Autor
+
+**Matheus Henrique Czeck** — Estudante de Engenharia de Software · Full Stack Developer
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-matheus--hcz-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/matheus-hcz/)
 [![GitHub](https://img.shields.io/badge/GitHub-matheus--czeck-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/matheus-czeck)
