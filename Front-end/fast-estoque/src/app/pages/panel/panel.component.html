@@ -2,6 +2,7 @@
   <app-navbar
     [showLogout]="true"
     [showRegister]="isAdmin"
+    [isAdmin]="isAdmin"
     (logout)="logOut()"
     (register)="openRegisterDialog()"
   ></app-navbar>

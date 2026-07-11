@@ -17,5 +17,6 @@ export class NavbarComponent {
   @Output() logout = new EventEmitter<void>();
   @Input() showRegister: boolean = false
   @Output() register = new EventEmitter<void>()
+  @Input() isAdmin: boolean = false
 
 }

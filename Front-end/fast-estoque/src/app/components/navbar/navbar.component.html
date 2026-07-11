@@ -6,7 +6,9 @@
 
   <div class="navbar-actions">
     <ng-container *ngIf="showLogout; else publicNav">
-      <span class="panel-badge">Painel do Funcionário</span>
+      <span class="panel-badge">{{
+        isAdmin ? "Painel Admin" : "Painel Funcionário"
+      }}</span>
       <button
         *ngIf="showRegister"
         pButton
